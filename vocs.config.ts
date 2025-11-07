@@ -27,7 +27,7 @@ export default defineConfig({
       collapsed: true,
       items: [
         {
-          text: '어떻게 x402가 작동하나요',
+          text: 'x402 작동 방식',
           link: '/core-concepts/how-x402-works',
         },
         {
