@@ -1,0 +1,330 @@
+---
+title: Bazaar (Discovery Layer)
+---
+
+import { Callout } from "vocs/components";
+
+# x402 Bazaar (Discovery Layer)
+
+x402 Bazaar는 x402 생태계의 검색 계층으로, 개발자와 AI 에이전트가 x402 호환 API 엔드포인트를 찾고 통합할 수 있도록 지원하는 기계 판독 가능 카탈로그입니다.
+유료 API 검색 인덱스라고 생각하면 되며, 서비스의 자율적인 검색 및 사용을 지원합니다.
+
+<Callout type="note">
+
+x402 Bazaar는 초기 개발 단계에 있습니다.
+저희의 비전은 "에이전트 엔드포인트를 위한 Google"을 구축하는 것이지만,
+현재는 "Yahoo 검색"과 같이 기능적이지만 끊임없이 진화하는 단계에 있습니다.
+피드백을 수집하고 기능을 확장함에 따라 기능과 API가 변경될 수 있습니다.
+
+</Callout>
+
+## 개요
+
+Bazaar는 x402 생태계의 중요한 문제인 검색 가능성(discoverability)을 해결합니다.
+검색 가능성이 없다면 x402 호환 엔드포인트는 마치 거대한 시장 속 숨겨진 가판대와 같습니다. Bazaar는 다음과 같은 기능을 제공합니다.
+
+- **구매자(API 소비자)를 위해** : 사용 가능한 x402 지원 서비스를 프로그래밍 방식으로 검색하고 해당 기능, 가격 및 스키마를 파악합니다.
+- **판매자(API 공급자)를 위한** : 개발자 및 AI 에이전트의 글로벌 대상에게 x402 지원 서비스에 대한 자동 가시성 제공
+- **AI 에이전트의 경우** : 사전 통합 없이 동적 서비스 검색 - 쿼리, 찾기, 지불 및 사용
+
+## 작동 원리
+
+Bazaar는 현재 `/list` CDP facilitator에 등록된 모든 x402 호환 서비스를 반환하는 간단한 엔드포인트를 제공합니다.
+API가 x402 결제에 최신 버전의 CDP facilitator를 사용하는 경우,
+입력 스키마에서 discoverable 플래그를 true로 설정하면 Bazaar에서 해당 서비스가 수집됩니다
+([**판매자를 위한 빠른 시작**](https://docs.cdp.coinbase.com/x402/bazaar#quickstart-for-sellers) 참조).
+
+### 기본 흐름
+
+1. **발견** : 클라이언트는 `/list` 엔드포인트를 쿼리하여 사용 가능한 서비스를 찾습니다.
+2. **선택** : 가격, 기능, 요구 사항을 기반으로 서비스를 선택하세요
+3. **실행** : x402를 사용하여 선택한 서비스에 대한 비용을 지불하고 액세스합니다.
+4. **수동 설정 없음** : API 키 없음, 계정 생성 없음, 검색 및 결제만 가능
+
+## API 참조
+
+### 목록 엔드포인트
+
+사용 가능한 모든 x402 호환 엔드포인트를 검색합니다.
+
+```shell
+GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources
+```
+
+참고: 이 엔드포인트를 사용하는 데 권장되는 방법은 [**아래**](https://docs.cdp.coinbase.com/x402/bazaar#quickstart-for-buyers) `useFacilitator` 설명된 대로 후크를 사용하는 것입니다.
+
+#### 응답 스키마
+
+목록의 각 엔드포인트에는 다음 필드가 포함되어 있습니다.
+
+```json
+{
+    "accepts": [
+        {
+            "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", // ERC-20 token contract address accepted for payment (here, USDC on Base)
+            "description": "", // Optional description of the accepted payment
+            "extra": {
+            "name": "USD Coin", // Human-readable name of the asset
+            "version": "2" // Version of the asset, if applicable
+            },
+            "maxAmountRequired": "200", // Maximum amount (in atomic units, e.g USDC has 6 decimals) required for the service
+            "maxTimeoutSeconds": 60, // Maximum time (in seconds) the service will wait for payment before expiring
+            "mimeType": "", // Expected MIME type for the response (optional/empty if not specified)
+            "network": "base", // network where payment is accepted (e.g., 'base' for Base L2)
+            "outputSchema": {
+            "input": {
+                "method": "GET", // HTTP method to use when calling the resource
+                "type": "http" // Type of resource (e.g., 'http' endpoint)
+            },
+            "output": null // Output schema (null if not specified)
+            },
+            "payTo": "0xa2477E16dCB42E2AD80f03FE97D7F1a1646cd1c0", // Address to which payment should be sent
+            "resource": "https://api.example.com/x402/last_sold", // The actual API endpoint/resource URL
+            "scheme": "exact" // Payment scheme (e.g., 'exact' means exact amount required)
+        }
+    ],
+    "lastUpdated": "2025-08-09T01:07:04.005Z",
+    "metadata": {}, // Additional metadata about the service (empty object if none)
+    "resource": "https://api.prixe.io/x402/last_sold", // The main resource URL for this service
+    "type": "http",
+    "x402Version": 1 // Version of the x402 protocol supported
+},
+```
+
+## 구매자를 위한 빠른 시작
+
+[**Python**](https://github.com/coinbase/x402/tree/main/examples/python/discovery)과
+[**Node.js**](https://github.com/coinbase/x402/tree/main/examples/typescript/discovery)
+에 대한 전체 예제는 각각의 링크에서 확인하세요 .
+
+### 1단계: 사용 가능한 서비스 찾기
+
+Facilitator 클라이언트를 사용하여 사용 가능한 x402 서비스 목록을 가져옵니다.
+
+:::code-group
+
+```javascript [Node.js]
+import { useFacilitator } from "x402/verify";
+import { facilitator } from "@coinbase/x402";
+
+// Get the list function from the facilitator
+const { list } = useFacilitator(facilitator);
+
+// Fetch all available services
+const services = await list();
+
+// NOTE: in an MCP context, you can see the full list then decide which service to use
+
+// Find services under $0.10
+const usdcAsset = "0x036CbD53842c5426634e7929541eC2318f3dCF7e";
+const maxPrice = 100000;
+
+const affordableServices = services.items.filter((item) =>
+  item.accepts.find(
+    (paymentRequirements) =>
+      paymentRequirements.asset == usdcAsset &&
+      Number(paymentRequirements.maxAmountRequired) < maxPrice
+  )
+);
+```
+
+```python [Python]
+from x402.facilitator import FacilitatorClient, FacilitatorConfig
+from cdp.x402 import create_facilitator_config
+
+# Set up facilitator client
+facilitator_config = create_facilitator_config()
+facilitator = FacilitatorClient(facilitator_config)
+
+# Fetch all available services
+services = await facilitator.list()
+
+# NOTE: in an MCP context, you can see the full list then decide which service to use
+
+# Find services under $0.10
+usdc_asset = "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+max_price = 100000
+
+affordable_services = [
+  item
+  for item in services.items
+  if any(
+    payment_req.asset == usdc_asset
+    and int(payment_req.max_amount_required) < max_price
+    for payment_req in item.accepts
+   )
+  ]
+```
+
+:::
+
+### 2단계: 검색된 서비스 호출
+
+적합한 서비스를 찾았으면 x402 클라이언트를 사용하여 호출하세요.
+
+:::code-group
+
+```javascript [Node.js]
+import { withPaymentInterceptor } from "x402-axios";
+import axios from "axios";
+import { privateKeyToAccount } from "viem/accounts";
+
+// Set up your payment account
+const account = privateKeyToAccount("0xYourPrivateKey");
+
+// Select a service from discovery
+const selectedService = affordableServices[0];
+
+// Create a payment-enabled client for that service
+const client = withPaymentInterceptor(
+  axios.create({ baseURL: selectedService.endpoint }),
+  account
+);
+
+// Select the payment method of your choice
+const selectedPaymentRequirements = selectedService.accepts[0];
+const inputSchema = selectedPaymentRequirements.outputSchema.input;
+
+// Build the request using the service's schema
+const response = await client.request({
+  method: inputSchema.method,
+  url: inputSchema.resource,
+  params: { location: "San Francisco" }, // Based on inputSchema
+});
+
+console.log("Response data:", response.data);
+```
+
+```python [Python]
+from x402.client import X402Client
+from eth_account import Account
+
+# Set up your payment account
+account = Account.from_key('0xYourPrivateKey')
+client = X402Client(account)
+
+# Select a service from discovery
+selected_service = affordable_services[0]
+
+# Select the payment method of your choice
+selected_payment_requirements = selected_service.accepts[0]
+input_schema = selected_payment_requirements.output_schema.input
+
+# Make the request
+response = client.request({
+    method=input_schema.method,
+    url=input_schema.resource,
+    params={ "location": "San Francisco" } # Based on input_schema
+})
+
+print(f"Response data: {response}")
+```
+
+:::
+
+## 판매자를 위한 빠른 시작
+
+### 검색 가능한 플래그가 있는 자동 목록
+
+API가 x402 결제를 위한 최신 버전의 CDP 중개자를 사용하는 경우, 입력 스키마에서 검색 가능 플래그를 true로 설정하면 Bazaar에서 수집됩니다(아래 참조).
+
+### 메타데이터 추가
+
+설명과 스키마를 추가하여 목록을 더욱 풍성하게 만들려면 x402 미들웨어를 설정할 때 포함하세요. 에이전트가 엔드포인트를 호출하는 방식을 명확하게 알 수 있도록 각 매개변수에 대한 설명을 포함해야 합니다.
+
+:::code-group
+
+```javascript [Node.js]
+// Next.js / Express / Hono
+import { paymentMiddleware, Network } from "x402-express"; // or x402-next or x402-hono
+
+app.use(
+  paymentMiddleware({
+    routes: {
+      "/api/weather": {
+        price: "$0.001",
+        network: "base",
+        config: {
+          discoverable: true, // make your endpoint discoverable
+          description: "Get current weather data for any location",
+          inputSchema: {
+            queryParams: {
+              location: {
+                type: string,
+                description: "City name or coordinates",
+                required: true,
+              },
+            },
+          },
+          outputSchema: {
+            type: "object",
+            properties: {
+              temperature: { type: "number" },
+              conditions: { type: "string" },
+              humidity: { type: "number" },
+            },
+          },
+        },
+      },
+    },
+  })
+);
+```
+
+```python [Python]
+# FastAPI / Flask
+from x402 import require_payment
+
+app.middleware("http")(
+    require_payment(
+        path="/weather",
+        price="$0.001",
+        pay_to_address=WALLET_ADDRESS,
+        network="base",
+        description="Get current weather data for any location",
+        discoverable=true, # make your endpoint discoverable <----
+        input_schema={
+            "queryParams": {
+                "location": {
+                    "type": string,
+                    "description": "City name or coordinates",
+                    "required": true
+                }
+            }
+        },
+        output_schema={
+            "type": "object",
+            "properties": {
+                "temperature": {"type": "number"},
+                "conditions": {"type": "string"},
+                "humidity": {"type": "number"}
+            }
+        }
+    )
+)
+```
+
+:::
+
+## 곧 출시 예정
+
+## 지원
+
+- **GitHub** : [**github.com/coinbase/x402**](https://github.com/coinbase/x402)
+- **Discord** : [**#x402 채널**](https://discord.com/invite/cdp)에 참여하세요
+- **문서** : [**x402 개요**](https://docs.cdp.coinbase.com/x402/welcome)
+
+## FAQ
+
+**질문: 서비스를 등록하려면 어떻게 해야 하나요?** 답변: CDP 퍼실리테이터를 사용하는 경우, 검색 가능 플래그를 추가하면 서비스가 등록됩니다.
+
+**질문: 엔드포인트 호출을 더 정확하게 하려면 어떻게 해야 하나요?** 답변: 각 매개변수의 기능과 엔드포인트 호출 방법을 명확하게 설명하는 설명을 포함하되, 최대한 간결하게 작성하세요.
+
+**질문: 바자에서 탈퇴할 수 있나요?** 답변: 곧 상품 등록 환경 설정을 관리할 수 있게 됩니다.
+
+**질문: 가격은 어떻게 책정되나요?** 답변: 등록은 무료입니다. 서비스는 API 호출당 가격을 책정하며, x402를 통해 결제됩니다.
+
+**질문: 어떤 네트워크가 지원되나요?** 답변: 현재 Base(메인넷)에서 USDC 결제가 가능합니다.
+
+**질문: x402가 아닌 서비스도 등록할 수 있나요?** 답변: 아니요, x402와 호환되는 엔드포인트만 등록할 수 있습니다.
+API를 x402와 호환되도록 설정하려면 [**판매자 빠른 시작**](https://docs.cdp.coinbase.com/x402/quickstart-for-sellers)을 참조하세요.
