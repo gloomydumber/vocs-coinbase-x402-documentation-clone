@@ -1,0 +1,155 @@
+---
+title: x402 MCP 서버
+---
+
+# MCP Server with x402
+
+[**모델 컨텍스트 프로토콜(MCP)**](https://www.modelcontextprotocol.io/)은 LLM과 다른 AI 에이전트 간에 컨텍스트를 전달하는 프로토콜입니다.
+이 페이지에서는 MCP와 함께 x402 결제 프로토콜을 사용하여 MCP 서버를 통해 유료 API 요청을 전송하고, 이를 Claude Desktop에 연결하는 방법을 보여줍니다.
+
+## 이 통합은 무엇인가요?
+
+이 가이드에서는 x402 프로토콜을 사용하여 유료 API에 액세스할 수 있는 MCP 서버를 실행하는 방법을 안내합니다.
+MCP 서버는 Claude Desktop(또는 MCP 호환 클라이언트)과 유료 API(예: x402 저장소의 샘플 날씨 API)를 연결하는 다리 역할을 합니다.
+Claude(또는 다른 에이전트)가 도구를 호출하면 MCP 서버는 다음을 수행합니다.
+
+- API가 결제를 요구하는지 감지합니다(HTTP 402를 통해)
+- 지갑을 사용하여 자동으로 결제를 처리합니다.
+- 유료 데이터를 클라이언트(예: Claude)에게 반환합니다.
+
+이를 통해 귀하(또는 귀하의 에이전트)는 수동 결제 단계 없이 유료 API에 프로그래밍 방식으로 액세스할 수 있습니다.
+
+## 필수 조건
+
+- Node.js(v20 이상)
+- 연결할 x402 호환 서버(이 데모에서는 x402 저장소의 [**날씨 데이터**](https://github.com/coinbase/x402/tree/main/examples/typescript/servers/express)나
+  외부 x402 API가 있는 샘플 Express 서버를 사용합니다)
+- USDC가 있는 Ethereum 지갑(Base Sepolia 또는 Base Mainnet)
+- [**MCP 지원이 포함된 Claude Desktop**](https://claude.ai/download)
+
+## 단계별: MCP + x402 통합 구축
+
+[**x402 저장소**](https://github.com/coinbase/x402/tree/main/examples/typescript/mcp)에서 이 코드의 바로 사용 가능한 버전을 찾을 수 있습니다.
+아래에서 각 단계를 설명하여 작동 방식을 이해하고 필요에 맞게 조정할 수 있도록 도와드리겠습니다.
+
+### 1. 종속성 설치
+
+```shell
+npm install @modelcontextprotocol/sdk axios viem x402-axios dotenv
+```
+
+### 2. 환경 변수 설정
+
+`.env` 프로젝트 루트에 파일을 만듭니다.
+
+```text
+PRIVATE_KEY=0xYourTestnetPrivateKey
+RESOURCE_SERVER_URL=http://localhost:4021
+ENDPOINT_PATH=/weather
+```
+
+- `PRIVATE_KEY`: EVM 지갑의 개인 키(결제 서명용)
+- `RESOURCE_SERVER_URL`: 유료 API의 기본 URL(이 데모에서는 샘플 Express 서버를 사용하세요)
+- `ENDPOINT_PATH`: 특정 종료점 경로(예: `/weather`)
+
+### 3. 구현: x402 결제를 지원하는 MCP 서버
+
+```javascript
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import axios from "axios";
+import { Hex } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+import { withPaymentInterceptor } from "x402-axios";
+import { config } from "dotenv";
+
+// Load environment variables and throw an error if any are missing
+config();
+
+const privateKey = process.env.PRIVATE_KEY as Hex;
+const baseURL = process.env.RESOURCE_SERVER_URL as string; // e.g. https://example.com
+const endpointPath = process.env.ENDPOINT_PATH as string; // e.g. /weather
+
+if (!privateKey || !baseURL || !endpointPath) {
+  throw new Error("Missing environment variables");
+}
+
+// Create a wallet client to handle payments
+const account = privateKeyToAccount(privateKey);
+
+// Create an axios client with payment interceptor using x402-axios
+const client = withPaymentInterceptor(axios.create({ baseURL }), account);
+
+// Create an MCP server
+const server = new McpServer({
+  name: "x402 MCP Client Demo",
+  version: "1.0.0",
+});
+
+// Add an addition tool
+server.tool(
+  "get-data-from-resource-server",
+  "Get data from the resource server (in this example, the weather)", //change this
+  description to change when the client calls the tool
+  {},
+  async () => {
+    const res = await client.get(endpointPath);
+    return {
+      content: [{ type: "text", text: JSON.stringify(res.data) }],
+    };
+  },
+);
+
+const transport = new StdioServerTransport();
+await server.connect(transport);
+```
+
+## 작동 원리
+
+- MCP 서버는 호출 시 유료 API 엔드포인트에서 데이터를 가져오는 도구를 제공합니다.
+- 엔드포인트에 결제가 필요한 경우 x402-axios 인터셉터는 지갑을 사용하여 결제 핸드셰이크를 처리합니다.
+- 결제가 완료되면 데이터가 MCP 클라이언트(예: Claude Desktop)로 반환됩니다.
+
+## Claude Desktop에 MCP 서버 추가
+
+Claude Desktop과 이 통합을 사용하려면:
+
+1. Claude Desktop을 열고 MCP 설정으로 이동합니다.
+2. 다음 구성으로 새로운 MCP 서버를 추가합니다(필요에 따라 경로를 조정합니다):
+
+```json
+{
+  "mcpServers": {
+    "demo": {
+      "command": "pnpm",
+      "args": [
+        "--silent",
+        "-C",
+        "<absolute path to this repo>/examples/typescript/clients/mcp",
+        "dev"
+      ],
+      "env": {
+        "PRIVATE_KEY": "<private key of a wallet with USDC on Base Sepolia>",
+        "RESOURCE_SERVER_URL": "http://localhost:4021",
+        "ENDPOINT_PATH": "/weather"
+      }
+    }
+  }
+}
+```
+
+3. x402 호환 서버(예: 샘플 익스프레스 서버)가 실행 중이고 귀하가 제공한 URL에서 접근 가능한지 확인하세요.
+4. MCP 클라이언트를 시작합니다(예: `pnpm dev` 클라이언트 디렉토리에서).
+5. 이제 클로드는 도구를 호출하여 유료 데이터를 받을 수 있습니다!
+
+## 조각들이 어떻게 맞춰지는지
+
+- **x402 호환 서버** : 유료 API(예: 날씨 데이터)를 호스팅합니다. 결제가 필요한 경우 HTTP 402로 응답합니다.
+- **MCP 서버(이 구현)** : 브리지 역할을 하며 결제를 처리하고 MCP 클라이언트에 도구를 노출합니다.
+- **Claude Desktop** : MCP 도구를 호출하고, 유료 데이터를 수신하여 사용자에게 표시합니다.
+
+## 다음 단계
+
+- [**저장소**](https://github.com/coinbase/x402/tree/main/examples/typescript/mcp)에서 전체 예를 확인하세요
+- 자체 x402 호환 API와 통합을 시도해 보세요.
+- 필요에 따라 더 많은 도구나 사용자 정의 논리를 사용하여 MCP 서버를 확장합니다.
