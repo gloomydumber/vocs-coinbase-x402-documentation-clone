@@ -1,0 +1,389 @@
+---
+title: 미니앱
+---
+
+# x402로 미니앱 빌드
+
+이 가이드에서는 공식 템플릿을 사용하여 x402 결제를 통합하는 미니앱을 구축하는 방법을 설명합니다.
+이 템플릿은 지갑 통합, 결제 보호, 알림 기능이 미리 구성되어 있어 완벽한 시작점을 제공합니다.
+
+## 미니앱이란 무엇인가요?
+
+미니앱은 TBA와 같은 Farcaster 클라이언트 내에서 실행되는 경량 애플리케이션입니다.
+MiniKit 으로 구축되어 Farcaster의 소셜 그래프 및 지갑 기능을 활용하면서 네이티브 앱과 유사한 경험을 제공합니다.
+x402를 통합하면 사용자가 앱을 나가거나 복잡한 결제 흐름을 관리할 필요 없이 미니앱에서 즉시 USDC 결제를 처리할 수 있습니다.
+
+## 미니앱에 x402를 사용하는 이유는?
+
+x402는 다음과 같은 이유로 미니앱에 특히 적합합니다.
+
+- **원활한 결제** : 사용자는 미니앱 환경을 벗어나지 않고도 결제할 수 있습니다.
+- **계정 설정 없음** : 연결된 지갑과 직접 작동
+- **즉각적인 수익 창출** : 빌더는 콘텐츠나 서비스를 직접 수익화할 수 있습니다.
+- **간단한 통합** : 미들웨어 구성만으로 결제 보호
+
+## 필수 조건
+
+시작하기 전에 다음 사항을 확인하세요.
+
+- Node.js 18+ 및 pnpm v10 설치됨
+- Coinbase [**개발자 플랫폼**](https://portal.cdp.coinbase.com/) 계정 및 API 키(메인넷용)
+- 결제를 받을 지갑 주소
+
+## x402 템플릿을 사용한 빠른 시작
+
+x402 기반 미니앱을 빌드하는 가장 빠른 방법은 공식 템플릿을 사용하는 것입니다.
+
+```shell
+# Clone the x402 repository
+git clone https://github.com/coinbase/x402.git
+cd x402/examples/typescript/fullstack/farcaster-miniapp
+
+# Install dependencies
+pnpm install
+
+# Build all packages (required for monorepo)
+cd ../../
+pnpm build
+cd fullstack/farcaster-miniapp
+
+# Copy environment variables
+cp env.example .env.local
+
+# Configure your environment (see below)
+# Then start the development server
+pnpm dev
+```
+
+## 템플릿 기능
+
+x402 미니앱 템플릿에는 다음이 포함됩니다.
+
+- TypeScript를 사용한 **Next.js 앱 라우터**
+- 지갑 연결을 위한 **OnchainKit 통합**
+- 보호된 경로를 위한 **x402 결제 미들웨어**
+- 미니앱 감지를 위한 **Farcaster Frame SDK**
+- Redis/Upstash를 이용한 **알림 시스템**
+
+## 프로젝트 구조
+
+```text
+farcaster-miniapp/
+├── app/
+│   ├── .well-known/
+│   │   └── farcaster.json/    # Dynamic Frame configuration
+│   │       └── route.ts
+│   ├── api/
+│   │   ├── notify/            # Notification proxy endpoint
+│   │   ├── protected/         # x402-protected endpoint
+│   │   └── webhook/           # Frame webhook handler
+│   ├── page.tsx               # Main miniapp interface
+│   ├── layout.tsx             # Root layout with providers
+│   ├── providers.tsx          # MiniKit and wallet providers
+│   └── globals.css            # Global styles
+├── lib/
+│   └── notification-client.ts # Notification utilities
+├── middleware.ts              # x402 payment middleware
+└── .env.local                 # Environment configuration
+```
+
+## 환경 구성
+
+`.env.local` 구성을 포함하는 파일을 만듭니다 .
+
+### x402 지불에 필요한 환경 변수
+
+```bash
+# Your wallet address to receive payments
+RESOURCE_WALLET_ADDRESS=0xYourWalletAddress
+
+# Network: "base-sepolia" for testing, "base" for production
+NETWORK=base-sepolia
+
+# OnchainKit API key (get from https://portal.cdp.coinbase.com/products/onchainkit)
+NEXT_PUBLIC_ONCHAINKIT_API_KEY=your_api_key_here
+NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME=x402 Mini App
+
+# For mainnet only (get from portal.cdp.coinbase.com)
+CDP_API_KEY_ID=your_cdp_key_id
+CDP_API_KEY_SECRET=your_cdp_key_secret
+```
+
+### 프레임 구성(자동 생성)
+
+다음 명령을 실행하여 프레임 구성을 생성합니다.
+
+```shell
+npx create-onchain --manifest
+```
+
+이렇게 하면 다음에 필요한 환경 변수가 생성됩니다.
+
+- 프레임 메타데이터 및 계정 연결
+- Redis/Upstash를 통한 알림 지원
+- 미니 앱 감지 및 통합
+
+## 템플릿 작동 방식
+
+### 1. 결제 미들웨어 설정
+
+이 `middleware.ts` 파일은 x402를 구성하여 API 경로를 보호합니다.
+
+```typescript
+import { facilitator } from "@coinbase/x402";
+import { paymentMiddleware } from "x402-next";
+
+const payTo = process.env.RESOURCE_WALLET_ADDRESS as Address;
+const network = process.env.NETWORK || "base-sepolia";
+
+export const middleware = paymentMiddleware(
+  payTo,
+  {
+    "/api/protected": {
+      price: "$0.01",
+      network,
+      config: {
+        description: "Protected route",
+      },
+    },
+  },
+  facilitator
+);
+
+export const config = {
+  matcher: ["/api/protected"],
+  runtime: "nodejs",
+};
+```
+
+### 2. 보호된 API 엔드포인트
+
+엔드포인트 는 `/api/protected/route.ts` 자동으로 보호됩니다.
+
+```typescript
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  // This only executes if payment is verified
+  return NextResponse.json({
+    success: true,
+    message: "Protected action completed successfully",
+    timestamp: new Date().toISOString(),
+  });
+}
+```
+
+### 3. 프런트엔드 통합
+
+메인 페이지는 지갑 연결과 보호된 API 호출을 보여줍니다.
+
+```javascript
+import { wrapFetchWithPayment } from "x402-fetch";
+import { getWalletClient } from "wagmi/actions";
+
+// Get wallet client from wagmi
+const walletClient = await getWalletClient(config, {
+  account: address,
+  chainId: chainId,
+  connector: connector,
+});
+
+// Wrap fetch with x402 payment handling
+const fetchWithPayment = wrapFetchWithPayment(fetch, walletClient);
+
+// Call protected endpoint - payment is handled automatically
+const response = await fetchWithPayment("/api/protected");
+```
+
+### 4. 미니앱 감지
+
+템플릿은 Farcaster 내부에서 실행될 때 다음을 감지합니다.
+
+```tsx
+import { sdk } from "@farcaster/frame-sdk";
+
+useEffect(() => {
+  const initMiniApp = async () => {
+    await sdk.actions.ready();
+    const isInMiniApp = await sdk.isInMiniApp();
+    setIsInMiniApp(isInMiniApp);
+  };
+  initMiniApp();
+}, []);
+```
+
+## 템플릿 사용자 정의
+
+### 더 많은 보호 경로 추가
+
+새로운 보호된 엔드포인트를 추가하기 위한 업데이트 `middleware.ts`:
+
+```typescript
+export const middleware = paymentMiddleware(
+  payTo,
+  {
+    "/api/protected": {
+      price: "$0.01",
+      network,
+    },
+    "/api/premium-content": {
+      price: "$1.00",
+      network,
+      config: {
+        description: "Premium content access",
+      },
+    },
+    "/api/exclusive-feature": {
+      price: "$5.00",
+      network,
+      config: {
+        description: "Exclusive feature unlock",
+      },
+    },
+  },
+  facilitator
+);
+
+export const config = {
+  matcher: ["/api/protected", "/api/premium-content", "/api/exclusive-feature"],
+};
+```
+
+### 알림 구현
+
+템플릿에는 Redis를 통한 알림 지원이 포함되어 있습니다.
+
+```typescript
+import { sendFrameNotification } from "@/lib/notification-client";
+
+// Send a notification after successful payment
+await sendFrameNotification({
+  fid: userFid,
+  title: "Payment Successful!",
+  body: "You've unlocked premium content",
+  notificationDetails: {
+    url: "/premium",
+    type: "payment_success",
+  },
+});
+```
+
+### UI 사용자 정의
+
+이 템플릿은 픽셀 테마의 Tailwind CSS를 사용합니다. 다음을 수정하여 `theme.css` 사용자 정의하세요.
+
+```css
+/* Custom theme variables */
+:root {
+  --ockThemePrimary: #4f46e5;
+  --ockThemeSecondary: #7c3aed;
+  --ockConnectWalletBackground: #ffffff;
+  /* ... more theme variables ... */
+}
+```
+
+## 미니앱 테스트
+
+### 로컬에서 개발
+
+1. 개발 서버를 시작하세요:
+
+```shell
+pnpm dev
+```
+
+2. 브라우저에서 [**http://localhost:3000**](http://localhost:3000)을 엽니다 .
+3. 지갑 연결 및 보호된 API 호출 테스트
+
+### Farcaster에서 테스트
+
+1. ngrok을 사용하여 로컬 서버를 노출하세요.
+
+```shell
+ngrok http 3000
+```
+
+2. ngrok URL로 `NEXT_PUBLIC_URL` 업데이트 하세요 `.env.local`
+3. Warpcast에서 테스트하기 위해 프레임 URL을 캐스팅하세요
+4. 미니앱에는 "앱 사용" 버튼이 표시됩니다.
+
+## 배포
+
+### 프로덕션 체크리스트
+
+- `NETWORK=base` 메인넷을 위해 설정됨
+- 메인넷 결제를 위한 CDP API 키 구성
+- `RESOURCE_WALLET_ADDRESS` 프로덕션 지갑을 업데이트하세요
+- `NEXT_PUBLIC_URL` 도메인에 맞게 적절하게 설정하세요
+- 테스트넷에서 먼저 지불 흐름을 철저히 테스트합니다.
+- 프로덕션 알림을 위해 Redis 구성
+
+## 모범 사례
+
+### 사용자 경험
+
+- **명확한 가격** : 결제를 요구하기 전에 항상 가격을 표시합니다.
+- **로딩 상태** : 결제 처리 중 진행 상황 표시
+- **오류 처리** : 명확한 오류 메시지와 복구 옵션 제공
+- **성공 피드백\*** : 성공적인 결제를 즉시 확인하세요
+
+### 보안
+
+- **환경 변수** : 민감한 키를 절대 커밋하지 마세요
+- **서버 검증** : 항상 서버 측에서 결제를 검증하세요
+- **네트워크 확인** : 사용자가 올바른 네트워크에 있는지 확인하세요
+- **속도 제한** : 보호된 엔드포인트에 속도 제한을 추가하는 것을 고려하세요.
+
+## 일반적인 문제 및 해결 방법
+
+### 결제가 처리되지 않음
+
+```typescript
+// Ensure wallet client is properly configured
+if (!walletClient) {
+  console.error("Wallet client not available");
+  return;
+}
+
+// Check network matches configuration
+if (chainId !== expectedChainId) {
+  console.error("Wrong network");
+  return;
+}
+```
+
+### 미니앱이 감지되지 않음
+
+```typescript
+// Ensure Frame SDK is initialized
+try {
+  await sdk.actions.ready();
+} catch (error) {
+  console.log("Not in miniapp context");
+}
+```
+
+### 402 오류가 처리되지 않음
+
+```typescript
+// Verify middleware matcher includes your route
+export const config = {
+  matcher: ["/api/your-route"], // Add your route here
+};
+```
+
+## 다음 단계
+
+1. **템플릿 탐색** : 예제 저장소 의 모든 파일 검토
+2. **사용 사례에 맞게 사용자 정의** : 특정 요구 사항에 맞게 템플릿을 수정하세요.
+3. **기능 추가** : 결제 기반 위에 구축
+4. **배포 및 공유** : Farcaster 커뮤니티에 미니앱을 출시하세요
+
+## 지원
+
+- [**x402 문서**](https://docs.cdp.coinbase.com/x402)
+- [**OnchainKit 문서**](https://onchainkit.xyz/)
+- [**Farcaster Mini 앱 가이드**](https://miniapps.farcaster.xyz/)
+- [**CDP Discord 커뮤니티**](https://discord.gg/cdp)
+
+지금 당장 x402로 수익 창출이 가능한 Farcaster 미니앱을 만들어 보세요!
