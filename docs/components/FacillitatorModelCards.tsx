@@ -64,7 +64,7 @@ function VocsCardContent({
 export default function FacillitatorModelCards() {
   return (
     <Box sx={{ flexGrow: 1, background: 'var(--vocs-color_background)' }}>
-      <Grid container spacing={2} alignItems="stretch">
+      <Grid container spacing={2} columns={{ xs: 6, md: 12 }} alignItems="stretch">
         <Grid size={6} sx={{ display: 'flex' }}>
           <VocsCard
             href='#cdp-호스팅-권장'
