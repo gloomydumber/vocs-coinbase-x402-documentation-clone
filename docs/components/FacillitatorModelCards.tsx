@@ -33,15 +33,17 @@ function VocsCard({ href, children }: VocsCardProps) {
   )
 }
 
+interface VocsCardContentProps {
+  Icon: React.ElementType;
+  title: string;
+  bullets: string[];
+};
+
 function VocsCardContent({
   Icon,
   title,
   bullets,
-}: {
-  Icon: React.ElementType;
-  title: string;
-  bullets: string[];
-}) {
+}: VocsCardContentProps) {
   return (
     <React.Fragment>
       <CardContent sx={{ background: 'var(--vocs-color_background)' }}>
