@@ -2,7 +2,11 @@ import { defineConfig } from 'vocs'
 
 export default defineConfig({
   title: 'Coinbase x402',
-  logoUrl: '',
+  logoUrl: '/x402-logo.png',
+  iconUrl: '/x402-icon-black.png',
+  theme: {
+    colorScheme: 'dark'
+  },
   sidebar: [
     {
       text: '개요',

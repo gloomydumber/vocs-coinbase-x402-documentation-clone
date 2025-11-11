@@ -1,0 +1,28 @@
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 130vw;
+  height: 100vh;
+  object-fit: cover;
+  inset: 0;
+
+  /* keep it truly behind the whole app */
+  z-index: -1;
+  pointer-events: none;
+
+  /* optional styling tweaks */
+  filter: blur(20px) brightness(0.6);
+}
+
+.vocs_Content:has(.bg-video) {
+  background-color: transparent;
+}
+
+.vocs_DocsLayout_content {
+  background-color: transparent;
+}
+
+.vocs_HomePage_logo {
+  height: 144px !important;
+}

@@ -1,23 +1,66 @@
 ---
+title: An open protocol for internet-native payments
 layout: landing
+content:
+  display: flex
+  horizontalPadding: 45rem
+  width: 100%
+  verticalPadding: 0px
 ---
 
+import "./index.css";
+
+<video className="bg-video" autoPlay loop playsInline muted>
+  <source src="/neonblobs.mp4" type="video/mp4" />
+</video>
+
 import { HomePage } from "vocs/components";
+import BestWayDigitalPayments from "../components/BestWayDigitalPayments";
+import NextGenDigitalCommerce from "../components/NextGenDigitalCommerce";
+import Footer from "../components/Footer";
 
 <HomePage.Root>
   <HomePage.Logo />
-  <HomePage.Tagline>Coinbase x402 Clone Documnetation</HomePage.Tagline>
-  <HomePage.InstallPackage name="@coinbase/cdp-sdk" type="install" />
+  <HomePage.Tagline>
+    An open protocol for internet-native payments
+  </HomePage.Tagline>
   <HomePage.Description>
     x402 is a new open payment protocol developed by Coinbase that enables
     instant, automatic stablecoin payments directly over HTTP.
   </HomePage.Description>
   <HomePage.Buttons>
     <HomePage.Button href="/overview" variant="accent">
-      Get started
+      Read the docs
     </HomePage.Button>
-    <HomePage.Button href="https://github.com/wevm/vocs">
+    <HomePage.Button href="https://github.com/gloomydumber/vocs-coinbase-x402-documentation-clone">
       GitHub
     </HomePage.Button>
   </HomePage.Buttons>
 </HomePage.Root>
+
+# The best way to accept digital payments.
+
+<BestWayDigitalPayments />
+
+# Powering Next-Gen Digital Commerce
+
+<NextGenDigitalCommerce />
+
+# 1 Line of Code to Accept Digital Dollars
+
+Just add a **single line of code** in your app, and you can require a USDC payment for each incoming request.
+
+```javascript
+paymentMiddleware("0xYourAddress", { "/your-endpoint": "$0.01" });
+// and thats it!
+```
+
+If a request arrives without payment, the server responds with HTTP 402, prompting the client to pay and retry.
+
+```bash
+HTTP/1.1 402 Payment Required
+```
+
+x402 allows any web developer to accept crypto payments without the complexity of having to interact with the blockchain.
+
+<Footer />
