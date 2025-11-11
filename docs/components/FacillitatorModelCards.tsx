@@ -16,7 +16,7 @@ interface VocsCardProps {
 function VocsCard({ href, children }: VocsCardProps) {
   return (
     <Card
-      variant="outlined"
+      variant='outlined'
       component='a'
       href={href}
       sx={{
@@ -48,10 +48,10 @@ function VocsCardContent({
     <React.Fragment>
       <CardContent sx={{ background: 'var(--vocs-color_background)' }}>
         <Icon sx={{ color: 'var(--vocs-color_textAccent)', fontSize: 34, m: 1 }} />
-        <Typography variant="h2" component="div" sx={{ color: 'var(--vocs-color_text)', fontSize: 20, m: 0.5 }}>
+        <Typography variant='h2' component='div' sx={{ color: 'var(--vocs-color_text)', fontSize: 20, m: 0.5 }}>
           {title}
         </Typography>
-        <Typography variant="body2" sx={{ color: 'var(--vocs-color_text3)', m: 1, fontSize: 16 }}>
+        <Typography variant='body2' sx={{ color: 'var(--vocs-color_text3)', m: 1, fontSize: 16 }}>
           {bullets.map((b, i) => (
             <React.Fragment key={i}>
               • {b}
@@ -66,14 +66,14 @@ function VocsCardContent({
 export default function FacillitatorModelCards() {
   return (
     <Box sx={{ flexGrow: 1, background: 'var(--vocs-color_background)' }}>
-      <Grid container spacing={2} columns={{ xs: 6, md: 12 }} alignItems="stretch">
+      <Grid container spacing={2} columns={{ xs: 6, md: 12 }} alignItems='stretch'>
         <Grid size={6} sx={{ display: 'flex' }}>
           <VocsCard
             href='#cdp-호스팅-권장'
           >
             <VocsCardContent
               Icon={PowerOutlinedIcon}
-              title="CDP-hosted (recommended)"
+              title='CDP-hosted (recommended)'
               bullets={[
                 'Production deployments',
                 'Compliance/KYT requirements',
@@ -89,7 +89,7 @@ export default function FacillitatorModelCards() {
           >
             <VocsCardContent
               Icon={ChatBubbleOutlineOutlinedIcon}
-              title="Community-maintained"
+              title='Community-maintained'
               bullets={[
                 'Rapid prototyping',
                 'SDK examples/tests',
@@ -104,7 +104,7 @@ export default function FacillitatorModelCards() {
           >
             <VocsCardContent
               Icon={StorageRoundedIcon}
-              title="Self-hosted"
+              title='Self-hosted'
               bullets={[
                 'Full control/private infrastructure',
                 'Custom networks/policies',
