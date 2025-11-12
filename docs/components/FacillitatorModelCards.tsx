@@ -69,7 +69,7 @@ export default function FacillitatorModelCards() {
       <Grid container spacing={2} columns={{ xs: 6, md: 12 }} alignItems='stretch'>
         <Grid size={6} sx={{ display: 'flex' }}>
           <VocsCard
-            href='#cdp-호스팅-권장'
+            href='/vocs-coinbase-x402-documentation-clone/network-and-token-support#cdp-호스팅-권장'
           >
             <VocsCardContent
               Icon={PowerOutlinedIcon}
@@ -85,7 +85,7 @@ export default function FacillitatorModelCards() {
         </Grid>
         <Grid size={6} sx={{ display: 'flex' }}>
           <VocsCard
-            href='#커뮤니티-유지-촉진자'
+            href='/vocs-coinbase-x402-documentation-clone/network-and-token-support#커뮤니티-유지-촉진자'
           >
             <VocsCardContent
               Icon={ChatBubbleOutlineOutlinedIcon}
@@ -100,7 +100,7 @@ export default function FacillitatorModelCards() {
         </Grid>
         <Grid size={6} sx={{ display: 'flex' }}>
           <VocsCard
-            href='#셀프-호스팅'
+            href='/vocs-coinbase-x402-documentation-clone/network-and-token-support#셀프-호스팅'
           >
             <VocsCardContent
               Icon={StorageRoundedIcon}
