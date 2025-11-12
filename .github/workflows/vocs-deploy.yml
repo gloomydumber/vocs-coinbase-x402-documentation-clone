@@ -25,22 +25,9 @@ jobs:
       - name: Build Vocs site
         run: npm run build
 
-      - name: Ensure dist exists and is not empty
-        run: |
-          if [ ! -d dist ]; then
-            echo "❌ dist/ directory does not exist. Build failed or output dir is different."
-            exit 1
-          fi
-          if [ -z "$(ls -A dist)" ]; then
-            echo "❌ dist/ exists but is empty. Nothing to deploy."
-            exit 1
-          fi
-          echo "✅ dist/ exists and has files:"
-          ls -R dist
-
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./docs/dist
           publish_branch: gh-pages
