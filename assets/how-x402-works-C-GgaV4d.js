@@ -1,0 +1,57 @@
+import{f as c,j as n}from"./index-H2UymVmJ.js";const d={title:"x402 작동 방식"};function r(e){const s={a:"a",code:"code",div:"div",h2:"h2",h3:"h3",img:"img",li:"li",ol:"ol",p:"p",strong:"strong",ul:"ul",...c(),...e.components};return n.jsxs(n.Fragment,{children:[n.jsx(s.p,{children:"이 페이지에서는 최초 요청 단계부터 결제 완료 단계까지 x402에서의 전체 결제 흐름을 설명합니다."}),`
+`,n.jsxs(s.h2,{id:"개요",children:["개요",n.jsx(s.a,{"aria-hidden":"true",tabIndex:"-1",href:"#개요",children:n.jsx(s.div,{"data-autolink-icon":!0})})]}),`
+`,n.jsx(s.p,{children:`x402는 HTTP의 요청(Request)-응답(Response) 방식의 프로그래밍을 통해 결제를 지원합니다.
+클라이언트가 유료 리소스를 요청하면 서버는 결제에 필요한 정보가 무엇인지 응답하고,
+그에 따라 클라이언트는 결제에 필요한 정보를 제출하고 결제가 완료되면 서버는 해당 유료 리소스를 전달합니다.`}),`
+`,n.jsxs(s.h2,{id:"결제-흐름",children:["결제 흐름",n.jsx(s.a,{"aria-hidden":"true",tabIndex:"-1",href:"#결제-흐름",children:n.jsx(s.div,{"data-autolink-icon":!0})})]}),`
+`,n.jsx(s.p,{children:n.jsx(s.img,{src:"/x402-protocol-flow.avif",alt:"x402-protocol-flow"})}),`
+`,n.jsxs(s.h3,{id:"단계별-프로세스",children:["단계별 프로세스",n.jsx(s.a,{"aria-hidden":"true",tabIndex:"-1",href:"#단계별-프로세스",children:n.jsx(s.div,{"data-autolink-icon":!0})})]}),`
+`,n.jsxs(s.ol,{children:[`
+`,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"클라이언트가 HTTP 요청"})," - ",n.jsx(s.a,{href:"https://docs.cdp.coinbase.com/x402/core-concepts/client-server",children:n.jsx(s.strong,{children:"클라이언트"})}),"는 리소스 서버의 결제를 위한 특정 엔드포인트에 표준 HTTP 요청을 보냅니다."]}),`
+`,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"서버가 HTTP 402 코드로 응답"}),` - 리소스 서버는 응답 본문(Body)에 결제 세부 정보와 함께
+`,n.jsx(s.a,{href:"https://docs.cdp.coinbase.com/x402/core-concepts/http-402",children:n.jsx(s.strong,{children:"HTTP 402 Payment Required"})})," 상태 코드를 반환합니다."]}),`
+`,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"클라이언트가 결제를 생성"}),` - 클라이언트는 결제 요구 사항을 검토하고 지정된 방식에 따라
+`,n.jsx(s.a,{href:"https://docs.cdp.coinbase.com/x402/core-concepts/wallet",children:n.jsx(s.strong,{children:"지갑"})}),"을 사용하여 결제 Payload를 생성합니다."]}),`
+`,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"클라이언트가 결제를 다시 제출"})," - 클라이언트가 동일한 HTTP 요청을 다시 전송하는데, 이번에는 서명된 결제 Payload가 포함된 ",n.jsx(s.code,{children:"X-PAYMENT"})," 헤더를 포함합니다."]}),`
+`,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"서버가 결제를 검증"})," - 리소스 서버는 다음 중 하나를 통해 결제 payload를 검증합니다.",`
+`,n.jsxs(s.ul,{children:[`
+`,n.jsx(s.li,{children:"로컬(자체 검증을 실행하는 경우)"}),`
+`,n.jsxs(s.li,{children:[n.jsx(s.a,{href:"https://docs.cdp.coinbase.com/x402/core-concepts/facilitator",children:n.jsx(s.strong,{children:"퍼실리테이터"})}),"를 통해서 (권장)"]}),`
+`]}),`
+`]}),`
+`,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"퍼실리테이터 검증"})," - 퍼실리테이터를 이용하는 경우, 퍼실리테이터는 지불을 Scheme 및 네트워크 요구 사항에 맞춰 검증하고 검증 Response를 반환합니다."]}),`
+`,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"서버가 요청을 처리"})," - 결제가 유효하면 서버는 원래 요청을 처리합니다. 유효하지 않으면 402 응답을 다시 반환합니다."]}),`
+`,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"결제 정산"})," - 서버는 다음 중 하나를 통해 블록체인 결제를 시작합니다.",`
+`,n.jsxs(s.ul,{children:[`
+`,n.jsx(s.li,{children:"블록체인에 직접 제출"}),`
+`,n.jsxs(s.li,{children:["퍼실리테이터의 ",n.jsx(s.code,{children:"/settle"})," 엔드포인트를 통해서 제출"]}),`
+`]}),`
+`]}),`
+`,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"퍼실리테이터가 블록체인에 제출"})," - 퍼실리테이터는 결제 네트워크를 기반으로 블록체인에 거래를 브로드캐스트하고 확인을 기다립니다."]}),`
+`,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"결제 확인"})," - 체인상에서 확인되면, 퍼실리테이터는 결제 실행 응답을 반환합니다."]}),`
+`,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"서버가 리소스를 전달"})," - 서버는 다음을 포함한 200 OK 응답을 반환합니다.",`
+`,n.jsxs(s.ul,{children:[`
+`,n.jsx(s.li,{children:"요청된 리소스 (응답 본문(Body))"}),`
+`,n.jsxs(s.li,{children:["결제 세부 정보가 포함된 ",n.jsx(s.code,{children:"X-PAYMENT-RESPONSE"})," HTTP 헤더"]}),`
+`]}),`
+`]}),`
+`]}),`
+`,n.jsxs(s.h2,{id:"주요-구성-요소",children:["주요 구성 요소",n.jsx(s.a,{"aria-hidden":"true",tabIndex:"-1",href:"#주요-구성-요소",children:n.jsx(s.div,{"data-autolink-icon":!0})})]}),`
+`,n.jsxs(s.p,{children:[n.jsx(s.a,{href:"https://docs.cdp.coinbase.com/x402/core-concepts/client-server",children:n.jsx(s.strong,{children:"클라이언트 및 서버"})}),` - 각 당사자의 역할 및 책임
+`,n.jsx(s.a,{href:"https://docs.cdp.coinbase.com/x402/core-concepts/facilitator",children:n.jsx(s.strong,{children:"퍼실리테이터"})}),` - 지불 검증 및 정산을 처리하는 선택적 서비스
+`,n.jsx(s.a,{href:"https://docs.cdp.coinbase.com/x402/core-concepts/http-402",children:n.jsx(s.strong,{children:"HTTP 402"})}),` - 결제 요구 사항이 전달되는 방식
+`,n.jsx(s.a,{href:"https://docs.cdp.coinbase.com/x402/network-support",children:n.jsx(s.strong,{children:"네트워크 및 퍼실리테이터"})})," - 사용 가능한 네트워크 및 퍼실리테이터 옵션"]}),`
+`,n.jsxs(s.h2,{id:"왜-이런-디자인을-했을까",children:["왜 이런 디자인을 했을까?",n.jsx(s.a,{"aria-hidden":"true",tabIndex:"-1",href:"#왜-이런-디자인을-했을까",children:n.jsx(s.div,{"data-autolink-icon":!0})})]}),`
+`,n.jsx(s.p,{children:"x402 프로토콜은 다음과 같이 설계되었습니다."}),`
+`,n.jsxs(s.ul,{children:[`
+`,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"상태 비저장"})," - 세션이나 인증이 필요하지 않습니다."]}),`
+`,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"HTTP 네이티브"})," - 기존 웹 인프라와 함께 작동합니다."]}),`
+`,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"블록체인 독립적"})," - 퍼실리테이터를 통해 여러 네트워크 지원"]}),`
+`,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"개발자 친화적"})," - 표준 HTTP 라이브러리와의 간단한 통합"]}),`
+`]}),`
+`,n.jsxs(s.h2,{id:"더-알아보기",children:["더 알아보기",n.jsx(s.a,{"aria-hidden":"true",tabIndex:"-1",href:"#더-알아보기",children:n.jsx(s.div,{"data-autolink-icon":!0})})]}),`
+`,n.jsxs(s.ul,{children:[`
+`,n.jsxs(s.li,{children:["결제를 받을 준비가 되셨나요? ",n.jsx(s.a,{href:"https://docs.cdp.coinbase.com/x402/quickstart-for-sellers",children:n.jsx(s.strong,{children:"판매자를 위한 빠른 시작"})}),"을 참조하세요."]}),`
+`,n.jsxs(s.li,{children:["결제를 원하시나요? ",n.jsx(s.a,{href:"https://docs.cdp.coinbase.com/x402/quickstart-for-buyers",children:n.jsx(s.strong,{children:"구매자를 위한 빠른 시작"})}),"을 참조하세요."]}),`
+`,n.jsxs(s.li,{children:["특정 네트워크를 찾고 계신가요? ",n.jsx(s.a,{href:"https://docs.cdp.coinbase.com/x402/network-support",children:n.jsx(s.strong,{children:"네트워크 지원"})}),"을 확인하세요."]}),`
+`]})]})}function l(e={}){const{wrapper:s}={...c(),...e.components};return s?n.jsx(s,{...e,children:n.jsx(r,{...e})}):r(e)}export{l as default,d as frontmatter};
