@@ -1,10 +1,10 @@
-import{f as c,j as n}from"./index-Clq6riR-.js";const d={title:"x402 작동 방식"};function r(e){const s={a:"a",code:"code",div:"div",h2:"h2",h3:"h3",img:"img",li:"li",ol:"ol",p:"p",strong:"strong",ul:"ul",...c(),...e.components};return n.jsxs(n.Fragment,{children:[n.jsx(s.p,{children:"이 페이지에서는 최초 요청 단계부터 결제 완료 단계까지 x402에서의 전체 결제 흐름을 설명합니다."}),`
+import{f as c,j as n}from"./index-D9RSfCtP.js";const d={title:"x402 작동 방식"};function r(e){const s={a:"a",code:"code",div:"div",h2:"h2",h3:"h3",img:"img",li:"li",ol:"ol",p:"p",strong:"strong",ul:"ul",...c(),...e.components};return n.jsxs(n.Fragment,{children:[n.jsx(s.p,{children:"이 페이지에서는 최초 요청 단계부터 결제 완료 단계까지 x402에서의 전체 결제 흐름을 설명합니다."}),`
 `,n.jsxs(s.h2,{id:"개요",children:["개요",n.jsx(s.a,{"aria-hidden":"true",tabIndex:"-1",href:"#개요",children:n.jsx(s.div,{"data-autolink-icon":!0})})]}),`
 `,n.jsx(s.p,{children:`x402는 HTTP의 요청(Request)-응답(Response) 방식의 프로그래밍을 통해 결제를 지원합니다.
 클라이언트가 유료 리소스를 요청하면 서버는 결제에 필요한 정보가 무엇인지 응답하고,
 그에 따라 클라이언트는 결제에 필요한 정보를 제출하고 결제가 완료되면 서버는 해당 유료 리소스를 전달합니다.`}),`
 `,n.jsxs(s.h2,{id:"결제-흐름",children:["결제 흐름",n.jsx(s.a,{"aria-hidden":"true",tabIndex:"-1",href:"#결제-흐름",children:n.jsx(s.div,{"data-autolink-icon":!0})})]}),`
-`,n.jsx(s.p,{children:n.jsx(s.img,{src:"/x402-protocol-flow.avif",alt:"x402-protocol-flow"})}),`
+`,n.jsx(s.p,{children:n.jsx(s.img,{src:"/vocs-coinbase-x402-documentation-clone/x402-protocol-flow.avif",alt:"x402-protocol-flow"})}),`
 `,n.jsxs(s.h3,{id:"단계별-프로세스",children:["단계별 프로세스",n.jsx(s.a,{"aria-hidden":"true",tabIndex:"-1",href:"#단계별-프로세스",children:n.jsx(s.div,{"data-autolink-icon":!0})})]}),`
 `,n.jsxs(s.ol,{children:[`
 `,n.jsxs(s.li,{children:[n.jsx(s.strong,{children:"클라이언트가 HTTP 요청"})," - ",n.jsx(s.a,{href:"https://docs.cdp.coinbase.com/x402/core-concepts/client-server",children:n.jsx(s.strong,{children:"클라이언트"})}),"는 리소스 서버의 결제를 위한 특정 엔드포인트에 표준 HTTP 요청을 보냅니다."]}),`
