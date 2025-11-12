@@ -2,22 +2,22 @@
 
 ## Docs
 
-- [MCP Server with x402](/mcp-server-with-x402): [**모델 컨텍스트 프로토콜(MCP)**](https://www.modelcontextprotocol.io/)은 LLM과 다른 AI 에이전트 간에 컨텍스트를 전달하는 프로토콜입니다.
+- [MCP Server with x402](/vocs-coinbase-x402-documentation-clone/mcp-server-with-x402): [**모델 컨텍스트 프로토콜(MCP)**](https://www.modelcontextprotocol.io/)은 LLM과 다른 AI 에이전트 간에 컨텍스트를 전달하는 프로토콜입니다.
 이 페이지에서는 MCP와 함께 x402 결제 프로토콜을 사용하여 MCP 서버를 통해 유료 API 요청을 전송하고, 이를 Claude Desktop에 연결하는 방법을 보여줍니다.
-- [x402로 미니앱 빌드](/miniapps): 이 가이드에서는 공식 템플릿을 사용하여 x402 결제를 통합하는 미니앱을 구축하는 방법을 설명합니다.
+- [x402로 미니앱 빌드](/vocs-coinbase-x402-documentation-clone/miniapps): 이 가이드에서는 공식 템플릿을 사용하여 x402 결제를 통합하는 미니앱을 구축하는 방법을 설명합니다.
 이 템플릿은 지갑 통합, 결제 보호, 알림 기능이 미리 구성되어 있어 완벽한 시작점을 제공합니다.
-- [네트워크 & 토큰 지원](/network-and-token-support): 모든 Facilitator의 완전하고 최신 디렉토리를 보려면 [**x402scan**](https://www.x402scan.com/facilitators)을 방문하세요.
-- [x402에 오신 것을 환영합니다](/overview): x402는 Coinbase에 의해 개방된 새로운 개방 결제 프로토콜로서, HTTP를 통해 자동화
+- [네트워크 & 토큰 지원](/vocs-coinbase-x402-documentation-clone/network-and-token-support): 모든 Facilitator의 완전하고 최신 디렉토리를 보려면 [**x402scan**](https://www.x402scan.com/facilitators)을 방문하세요.
+- [x402에 오신 것을 환영합니다](/vocs-coinbase-x402-documentation-clone/overview): x402는 Coinbase에 의해 개방된 새로운 개방 결제 프로토콜로서, HTTP를 통해 자동화
 되고 즉각적인 스테이블 코인 결제를 가능하게 합니다.
-- [자주 묻는 질문](/support/faq): 이 내용은 공식 CDP 문서에 해당합니다. 커뮤니티에서 관리되는 문서는 [**x402.gitbook.io/x402**](x402.gitbook.io/x402)에서 확인할 수 있습니다.
-- [구매자를 위한 빠른 시작](/quick-start/quickstart-for-buyers): 이 내용은 공식 CDP 문서에 해당합니다. 커뮤니티에서 관리되는 문서는 [**x402.gitbook.io/x402**](x402.gitbook.io/x402)에서 확인할 수 있습니다.
-- [판매자를 위한 빠른 시작](/quick-start/quickstart-for-sellers): 이 가이드에서는 x402와 통합하여 API 또는 서비스에 대한 결제를 활성화하는 방법을 안내합니다.
+- [자주 묻는 질문](/vocs-coinbase-x402-documentation-clone/support/faq): 이 내용은 공식 CDP 문서에 해당합니다. 커뮤니티에서 관리되는 문서는 [**x402.gitbook.io/x402**](x402.gitbook.io/x402)에서 확인할 수 있습니다.
+- [구매자를 위한 빠른 시작](/vocs-coinbase-x402-documentation-clone/quick-start/quickstart-for-buyers): 이 내용은 공식 CDP 문서에 해당합니다. 커뮤니티에서 관리되는 문서는 [**x402.gitbook.io/x402**](x402.gitbook.io/x402)에서 확인할 수 있습니다.
+- [판매자를 위한 빠른 시작](/vocs-coinbase-x402-documentation-clone/quick-start/quickstart-for-sellers): 이 가이드에서는 x402와 통합하여 API 또는 서비스에 대한 결제를 활성화하는 방법을 안내합니다.
 가이드를 완료하면 API에서 구매자와 AI 에이전트에게 액세스 요금을 청구할 수 있게 됩니다.
-- [x402 Bazaar (Discovery Layer)](/core-concepts/bazaar-discovery-layer): x402 Bazaar는 x402 생태계의 검색 계층으로, 개발자와 AI 에이전트가 x402 호환 API 엔드포인트를 찾고 통합할 수 있도록 지원하는 기계 판독 가능 카탈로그입니다.
+- [x402 Bazaar (Discovery Layer)](/vocs-coinbase-x402-documentation-clone/core-concepts/bazaar-discovery-layer): x402 Bazaar는 x402 생태계의 검색 계층으로, 개발자와 AI 에이전트가 x402 호환 API 엔드포인트를 찾고 통합할 수 있도록 지원하는 기계 판독 가능 카탈로그입니다.
 유료 API 검색 인덱스라고 생각하면 되며, 서비스의 자율적인 검색 및 사용을 지원합니다.
-- [클라이언트 / 서버 흐름](/core-concepts/client-server-flow): 이 페이지에서는 x402 프로토콜에서 **클라이언트**와 **서버**의 역할과 책임을 설명합니다.
+- [클라이언트 / 서버 흐름](/vocs-coinbase-x402-documentation-clone/core-concepts/client-server-flow): 이 페이지에서는 x402 프로토콜에서 **클라이언트**와 **서버**의 역할과 책임을 설명합니다.
 클라이언트와 서버의 역할을 이해하는 것은 x402를 사용하여 프로그래밍 방식 결제 서비스를 설계, 구축 또는 통합하는 데 필수적입니다.
-- [퍼실리테이터](/core-concepts/facilitator): 이 페이지에서는 x402 프로토콜에서 **퍼실리테이터**의 역할을 설명합니다.
-- [HTTP 402](/core-concepts/http-x402): HTTP 402 Payment Required 상태 코드는 존재는 했지만, 긴 시간동안 실제 사용은 되지 않고 있었습니다.
+- [퍼실리테이터](/vocs-coinbase-x402-documentation-clone/core-concepts/facilitator): 이 페이지에서는 x402 프로토콜에서 **퍼실리테이터**의 역할을 설명합니다.
+- [HTTP 402](/vocs-coinbase-x402-documentation-clone/core-concepts/http-x402): HTTP 402 Payment Required 상태 코드는 존재는 했지만, 긴 시간동안 실제 사용은 되지 않고 있었습니다.
 이제 x402가 해당 상태 코드를 활용해서 [**인터넷의 원죄**](https://economyofbits.substack.com/p/marc-andreessens-original-sin)를 해결합니다.
-- [월렛](/core-concepts/wallet): 이 페이지에서는 x402 프로토콜에서 **월렛**의 역할을 설명합니다.
+- [월렛](/vocs-coinbase-x402-documentation-clone/core-concepts/wallet): 이 페이지에서는 x402 프로토콜에서 **월렛**의 역할을 설명합니다.
