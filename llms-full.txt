@@ -1016,23 +1016,23 @@ import { Callout } from "vocs/components";
 ## 구매자를 위한 빠른 시작
 
 <Callout type="info">
-  이 내용은 공식 CDP 문서에 해당합니다. 커뮤니티에서 관리되는 문서는 [**x402.gitbook.io/x402**](x402.gitbook.io/x402)에서 확인할 수 있습니다.
+  이 내용은 공식 CDP 문서에 해당합니다. 커뮤니티에서 관리되는 문서는 [**x402.gitbook.io/x402**](https://x402.gitbook.io/x402)에서 확인할 수 있습니다.
 
   도움이 필요하면 [**x402 디스코드**](https://discord.gg/cdp)에 방문해주세요.
 </Callout>
 
-이 가이드에서는 **x402**를 사용하여 결제가 필요한 서비스와 상호 작용하는 방법을안내합니다.
-이 가이드를 마치면 프로그래밍 방식으로 결제 요건을 확인하고, 결제를완료하고, 유료 리소스에 액세스할 수 있게 됩니다.
+이 가이드에서는 **x402**를 사용하여 결제가 필요한 서비스와 상호 작용하는 방법을 안내합니다.
+이 가이드를 통해 프로그래밍 방식으로 결제 요건을 확인하고, 결제를 완료하고, 유료 리소스에 액세스할 수 있게 됩니다.
 
-다양한 언어용 x402 도우미 패키지는 x402와의 통합을 크게 간소화합니다.
+다양한 언어용 x402 도우미 패키지를 통해 x402를 간단하고 편리하게 이용할 수 있습니다.
 최소한의 코드만으로 결제 문제를 자동으로 감지하고, 온체인에서 결제를 승인하고, 요청을 재시도할 수 있습니다.
 이 패키지는 다음 흐름을 자동으로 트리거합니다.
 
-1. Fetch를 사용하는 경우 초기 요청을 만들거나 Axios / HTTPX / Requests를 사용하는 경우 초기 요청을 가로챕니다.
-2. 402 응답이 수신되면 결제 요구 사항을 구문 분석합니다.
+1. Fetch를 사용하는 경우 초기 요청을 만들거나 Axios / HTTPX / Requests를 사용하는 경우 초기 요청을 인터셉트 합니다.
+2. 402 응답이 수신되면 결제 요구 사항을 파싱합니다.
 3. 지불 금액이 허용 최대 금액 내에 있는지 확인합니다.
 4. 제공된 지갑 클라이언트를 사용하여 지불 헤더를 생성합니다.
-5. 결제 헤더로 요청을 다시 시도합니다.
+5. 결제 헤더를 포함하여 결제 요청을 다시 시도합니다.
 
 ### 필수 조건
 
@@ -1045,7 +1045,7 @@ import { Callout } from "vocs/components";
 * x402를 통한 결제가 필요한 서비스
 
 <Callout type="info">
-  저희 [**저장소**](https://github.com/coinbase/x402/tree/main/examples)에는
+  저희 [**리포지토리**](https://github.com/coinbase/x402/tree/main/examples)에는
   fetch, Axios, MCP에 대한 예제를 포함하여 미리 구성된 예제가 있습니다.
 </Callout>
 
@@ -1070,7 +1070,7 @@ pip install x402
 ### 2. 지갑 클라이언트 생성
 
 [**CDP의 서버 지갑**](https://docs.cdp.coinbase.com/server-wallets/v1/concepts/wallets)(추천) 이나
-독립형 지갑 라이브러리(Node.js의 EVM용 [**viem**](https://viem.sh/),
+스탠드얼론 지갑 라이브러리(Node.js의 EVM용 [**viem**](https://viem.sh/),
 Python의 EVM용 [**eth-account**](https://github.com/ethereum/eth-account),
 Solana 지원용 [**SolanaKit**](https://www.solanakit.com/))를 사용하여 지갑 클라이언트를 만듭니다.
 
@@ -1099,9 +1099,9 @@ pip install cdp python-dotenv
 
 마지막으로, [**Server Wallet Quickstart**](https://docs.cdp.coinbase.com/server-wallets/v2/introduction/quickstart) 에서 제안한 대로 CDP 클라이언트를 인스턴스화합니다.
 
-#### 독점형 지갑 라이브러리
+#### 스탠드얼론 지갑 라이브러리
 
-자체 지갑을 사용하려면 독립 실행형 라이브러리를 사용할 수 있습니다.
+자체 지갑을 사용하려면 스탠드얼론 지갑 라이브러리를 사용할 수 있습니다.
 
 ##### EVM
 
@@ -1154,26 +1154,24 @@ const signer = await createKeyPairSignerFromBytes(
 
 x402 도우미 패키지를 사용하면 402 결제 필요 응답을 자동으로 처리하고 결제 흐름을 완료할 수 있습니다.
 
-:::code-group
-```md [Node.js]
-`x402-fetch` 다음 중 하나를 사용할 수 있습니다 `x402-axios`.
-```
+**Node.js** :
 
-```md [Python]
-`httpx` 다음 중 하나를 사용할 수 있습니다 `Requests`.
-
-- **Requests**는 **동기식** HTTP 요청을 위한 탄탄한 라이브러리입니다 . 간단하고 순차적인 워크플로에 적합합니다.
-- **HTTPX** 는 **동기** 및 **비동기** HTTP 요청을 모두 지원하는 최신 라이브러리입니다 . 높은 동시성이나 비동기 기능이 필요할 때 사용하세요.
-
-두 방식 모두 **간단** 하고 **확장 가능한** 접근 방식을 지원합니다 . 간단한 접근 방식(아래 참조)은 결제를 자동으로 처리하는 미리 구성된 클라이언트를 반환합니다.
-```
-:::
+`x402-fetch` 와 `x402-axios` 중 하나를 사용할 수 있습니다.
 
 **x402-fetch**는 네이티브 `fetch` API를 확장하여 402 응답과 결제 헤더를 자동으로 처리합니다.
 전체 예시는 [**여기**](https://github.com/coinbase/x402/tree/main/examples/typescript/clients/fetch)에서 확인하세요.
 
 **x402-axios**는 Axios에 결제 인터셉터를 추가하여 결제 헤더를 사용하여 요청을 자동으로 재시도합니다.
 전체 예시는 [**여기**](https://github.com/coinbase/x402/tree/main/examples/typescript/clients/axios)에서 확인하세요.
+
+**Python** :
+
+`httpx` 와 `Requests` 중 하나를 사용할 수 있습니다.
+
+* **Requests**는 **동기식** HTTP 요청을 위한 잘 설계된 라이브러리입니다. 간단하고 순차적인 워크플로에 적합합니다.
+* **HTTPX** 는 **동기** 및 **비동기** HTTP 요청을 모두 지원하는 최신 라이브러리입니다. 높은 동시성이나 비동기 기능이 필요할 때 사용할 수 있습니다.
+
+두 방식 모두 **간단** 하고 **확장 가능한** 접근 방식을 지원합니다. 간단한 접근 방식(아래 참조)은 결제를 자동으로 처리하는 미리 구성된 클라이언트를 반환합니다.
 
 :::code-group
 ```javascript [x402-fetch]
@@ -1259,7 +1257,7 @@ print(response.content)
 엔드포인트를 하드코딩하는 대신 x402 Bazaar를 사용하여 사용 가능한 서비스를 동적으로 검색할 수 있습니다.
 이는 특히 새로운 기능을 찾아 사용할 수 있는 자율 에이전트를 구축하는 데 매우 유용합니다.
 [**Python**](https://github.com/coinbase/x402/tree/main/examples/python/discovery)과
-[**Node.js**](https://github.com/coinbase/x402/tree/main/examples/typescript/discovery)에 대한 전체 예제는 여기에서 확인하세요.
+[**Node.js**](https://github.com/coinbase/x402/tree/main/examples/typescript/discovery)에 대한 전체 예제를 확인할 수 있습니다.
 
 :::code-group
 ```javascript [Node.js]
@@ -1295,19 +1293,19 @@ services = await facilitator.list()
 
 ### 5. 오류 처리
 
-클라이언트는 다음과 같은 경우 오류를 발생시킵니다.
+클라이언트는 다음과 같은 경우 오류가 발생합니다.
 
-* 요청 구성이 누락되었습니다.
-* 해당 요청에 대한 지불이 이미 시도되었습니다.
-* 결제 헤더를 생성하는 중 오류가 발생했습니다.
+* 요청 구성 누락
+* 해당 요청에 대한 지불이 이미 시도됨
+* 결제 헤더를 생성하는 중 오류가 발생
 
 ### 요약
 
 * x402 클라이언트 패키지 설치
 * 지갑 클라이언트 생성
-* 제공된 래퍼/인터셉터를 사용하여 유료 API 요청을 만드세요.
-* (선택 사항) x402 Bazaar를 사용하여 서비스를 동적으로 검색합니다.
-* 결제 흐름은 자동으로 처리됩니다.
+* 제공된 wrapper/interceptor를 사용하여 유료 API 요청 만들기
+* (선택 사항) x402 Bazaar를 사용하여 서비스를 동적으로 검색하기
+* 결제 자체는 이러한 과정을 통해 자동으로 처리됨
 
 ### 참고문헌:
 

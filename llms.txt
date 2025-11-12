@@ -10,7 +10,7 @@
 - [x402에 오신 것을 환영합니다](/vocs-coinbase-x402-documentation-clone/overview): x402는 Coinbase에 의해 개방된 새로운 개방 결제 프로토콜로서, HTTP를 통해 자동화
 되고 즉각적인 스테이블 코인 결제를 가능하게 합니다.
 - [자주 묻는 질문](/vocs-coinbase-x402-documentation-clone/support/faq): 이 내용은 공식 CDP 문서에 해당합니다. 커뮤니티에서 관리되는 문서는 [**x402.gitbook.io/x402**](x402.gitbook.io/x402)에서 확인할 수 있습니다.
-- [구매자를 위한 빠른 시작](/vocs-coinbase-x402-documentation-clone/quick-start/quickstart-for-buyers): 이 내용은 공식 CDP 문서에 해당합니다. 커뮤니티에서 관리되는 문서는 [**x402.gitbook.io/x402**](x402.gitbook.io/x402)에서 확인할 수 있습니다.
+- [구매자를 위한 빠른 시작](/vocs-coinbase-x402-documentation-clone/quick-start/quickstart-for-buyers): 이 내용은 공식 CDP 문서에 해당합니다. 커뮤니티에서 관리되는 문서는 [**x402.gitbook.io/x402**](https://x402.gitbook.io/x402)에서 확인할 수 있습니다.
 - [판매자를 위한 빠른 시작](/vocs-coinbase-x402-documentation-clone/quick-start/quickstart-for-sellers): 이 가이드에서는 x402와 통합하여 API 또는 서비스에 대한 결제를 활성화하는 방법을 안내합니다.
 가이드를 완료하면 API에서 구매자와 AI 에이전트에게 액세스 요금을 청구할 수 있게 됩니다.
 - [x402 Bazaar (Discovery Layer)](/vocs-coinbase-x402-documentation-clone/core-concepts/bazaar-discovery-layer): x402 Bazaar는 x402 생태계의 검색 계층으로, 개발자와 AI 에이전트가 x402 호환 API 엔드포인트를 찾고 통합할 수 있도록 지원하는 기계 판독 가능 카탈로그입니다.
