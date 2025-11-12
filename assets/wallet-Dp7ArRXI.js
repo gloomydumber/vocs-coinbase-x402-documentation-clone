@@ -1,4 +1,4 @@
-import{f as r,j as n}from"./index-BhO9zbjr.js";const c={title:"월렛",description:"undefined"};function i(s){const e={a:"a",div:"div",h1:"h1",h2:"h2",h3:"h3",header:"header",li:"li",p:"p",strong:"strong",ul:"ul",...r(),...s.components};return n.jsxs(n.Fragment,{children:[n.jsx(e.header,{children:n.jsxs(e.h1,{id:"월렛",children:["월렛",n.jsx(e.a,{"aria-hidden":"true",tabIndex:"-1",href:"#월렛",children:n.jsx(e.div,{"data-autolink-icon":!0})})]})}),`
+import{f as r,j as n}from"./index-liC9dd_j.js";const c={title:"월렛",description:"undefined"};function i(s){const e={a:"a",div:"div",h1:"h1",h2:"h2",h3:"h3",header:"header",li:"li",p:"p",strong:"strong",ul:"ul",...r(),...s.components};return n.jsxs(n.Fragment,{children:[n.jsx(e.header,{children:n.jsxs(e.h1,{id:"월렛",children:["월렛",n.jsx(e.a,{"aria-hidden":"true",tabIndex:"-1",href:"#월렛",children:n.jsx(e.div,{"data-autolink-icon":!0})})]})}),`
 `,n.jsxs(e.p,{children:["이 페이지에서는 x402 프로토콜에서 ",n.jsx(e.strong,{children:"월렛"}),"의 역할을 설명합니다."]}),`
 `,n.jsx(e.p,{children:`x402에서 월렛은 결제 메커니즘이자 구매자와 판매자의 고유한 신원 확인 수단입니다.
 지갑 주소는 결제를 보내고 받고 확인하는 데 사용되는 동시에 프로토콜 내에서 식별자 역할을 합니다.`}),`
