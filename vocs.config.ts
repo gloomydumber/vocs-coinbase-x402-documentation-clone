@@ -2,6 +2,7 @@ import { defineConfig } from 'vocs'
 
 export default defineConfig({
   title: 'Coinbase x402',
+  baseUrl: 'https://gloomydumber.github.io/vocs-coinbase-x402-documentation-clone/',
   logoUrl: '/x402-logo.png',
   iconUrl: '/x402-icon-black.png',
   theme: {
